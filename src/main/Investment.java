@@ -1,10 +1,10 @@
 import java.util.Random;
 
 public class Investment {
-    private double qInvest;
-    private int duration; // 0 1 2
+    private final double qInvest;
+    private final int duration; // 0 1 2
     private int limit;
-    private int riskEarning; // 0 1 2
+    private final int riskEarning; // 0 1 2
     private boolean isFinish;
     private double result;
 
@@ -90,11 +90,11 @@ public class Investment {
         return riskEarning;
     }
 
-    public void setResult(double b) {
-        result = b;
-    }
-
     public double getResult() {
         return result;
+    }
+
+    public void setResult(double b) {
+        result = b;
     }
 }
