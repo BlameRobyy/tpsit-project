@@ -11,7 +11,7 @@ public class Main {
         SanPaolo.createAccountList(s1);
         SanPaolo.createAccountList(s2);
         SanPaolo.createAccountList(s3);
-        System.out.println("LO5LO");
+        System.out.println("LO5876756453LO");
         Bank Generali = new Bank();
         BankAccount g1 = new BankAccount("001");
         BankAccount g2 = new BankAccount("002");
