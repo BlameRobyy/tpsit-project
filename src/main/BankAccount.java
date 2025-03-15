@@ -17,6 +17,8 @@ public class BankAccount {
     return personalCodeBank;
   }
 
+
+
   public double getPersonalBalance() {
     return personalBalance;
   }

@@ -29,6 +29,7 @@ public class Bank {
       return false;
     }
     for (int i = 0; i < accountList.size(); i++) {
+      System.out.println("Checking account: " + accountList.get(i).getPersonalCodeBank());
       if (accountList.get(i).getPersonalCodeBank().equals(v.getPersonalCodeUser())) {
         return true;
       }

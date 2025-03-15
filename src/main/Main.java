@@ -10,13 +10,13 @@ public class Main {
     Bank Generali = new Bank();
 
     // Creazione degli account bancari
-    BankAccount s1 = new BankAccount("001");
-    BankAccount s2 = new BankAccount("002");
-    BankAccount s3 = new BankAccount("003");
+    BankAccount s1 = new BankAccount("user001");
+    BankAccount s2 = new BankAccount("user002");
+    BankAccount s3 = new BankAccount("user003");
 
-    BankAccount g1 = new BankAccount("001");
-    BankAccount g2 = new BankAccount("002");
-    BankAccount g3 = new BankAccount("003");
+    BankAccount g1 = new BankAccount("user001");
+    BankAccount g2 = new BankAccount("user002");
+    BankAccount g3 = new BankAccount("user003");
 
     // Aggiunta degli account bancari alle rispettive banche
     SanPaolo.createAccountList(s1);
@@ -38,6 +38,27 @@ public class Main {
     userManager.addUser(u3);
     userManager.addUser(u4);
 
+    s1.setOwner(u1);
+    s2.setOwner(u2);
+    s3.setOwner(u3);
+
+    g1.setOwner(u1);
+    g2.setOwner(u2);
+    g3.setOwner(u3);
+
+    for (BankAccount account : SanPaolo.getAccountList()) {
+      User owner = userManager.getUser(account.getPersonalCodeBank());
+      if (owner != null) {
+        account.setOwner(owner);
+      }
+    }
+
+    for (BankAccount account : Generali.getAccountList()) {
+      User owner = userManager.getUser(account.getPersonalCodeBank());
+      if (owner != null) {
+        account.setOwner(owner);
+      }
+    }
     System.out.println("Hi, I will help you with your bank account.");
     System.out.println("Which bank do you want to use? (San Paolo = 0 | Generali = 1)");
 
@@ -59,6 +80,7 @@ public class Main {
       User currentUser = userManager.getUser(code);
 
       if (currentUser != null) {
+
         System.out.println("Perfect, account found.");
         System.out.println("Now you can do these operations:");
         System.out.println("- Deposit (code 0)");
@@ -76,11 +98,26 @@ public class Main {
           int operation = scanner.nextInt();
 
           switch (operation) {
-            case 0 -> currentUser.deposit(selectedBank);
-            case 1 -> currentUser.withdraw(selectedBank);
-            case 2 -> currentUser.lookWallet();
-            case 3 -> currentUser.lookPersonalBalance(selectedBank);
-            case 4 -> selectedBank.timeTravel(currentUser);
+            case 0 -> {
+              System.out.println("Performing deposit...");
+              currentUser.deposit(selectedBank);
+            }
+            case 1 -> {
+              System.out.println("Performing withdrawal...");
+              currentUser.withdraw(selectedBank);
+            }
+            case 2 -> {
+              System.out.println("Looking at wallet...");
+              currentUser.lookWallet();
+            }
+            case 3 -> {
+              System.out.println("Looking at personal balance...");
+              currentUser.lookPersonalBalance(selectedBank);
+            }
+            case 4 -> {
+              System.out.println("Performing time travel...");
+              selectedBank.timeTravel(currentUser);
+            }
             case 5 -> {
               System.out.println("How much do you want to invest?");
               double invest1 = scanner.nextDouble();
@@ -100,11 +137,11 @@ public class Main {
                   }
                 } else {
                   System.out.println("Wrong type of risk.");
-                  System.exit(1);
+                  break;
                 }
               } else {
                 System.out.println("Wrong type of duration.");
-                System.exit(1);
+                break;
               }
             }
             case 6 -> {

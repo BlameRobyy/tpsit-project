@@ -30,6 +30,7 @@ public class UserManager {
     // Salva gli utenti nel file
     public void saveUsers() {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(FILE_NAME))) {
+            System.out.println("Saving users: " + usersMap.keySet());
             oos.writeObject(usersMap);
         } catch (IOException e) {
             e.printStackTrace();
@@ -50,4 +51,6 @@ public class UserManager {
     public HashMap<String, User> getUsersMap() {
         return usersMap;
     }
+
+
 }
