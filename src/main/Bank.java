@@ -4,6 +4,7 @@ import java.util.Vector;
 
 public class Bank {
   private ArrayList<BankAccount> accountList = new ArrayList<>();
+  private ArrayList<User> userList = new ArrayList<>();
   private int day;
 
   public Bank() {}
@@ -18,10 +19,17 @@ public class Bank {
     accountList.add(o);
   }
 
+  public void addUser(User user) {
+    userList.add(user);
+  }
+
   // Method to check if a user's personal code matches an account
-  public boolean checkPersonalCode(User u) {
+  public boolean checkPersonalCode(User v) {
+    if (v == null) {
+      return false;
+    }
     for (int i = 0; i < accountList.size(); i++) {
-      if (accountList.get(i).getPersonalCodeBank().equals(u.getPersonalCodeUser())) {
+      if (accountList.get(i).getPersonalCodeBank().equals(v.getPersonalCodeUser())) {
         return true;
       }
     }

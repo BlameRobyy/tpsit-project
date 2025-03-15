@@ -1,6 +1,6 @@
 import java.util.Scanner;
-
-public class User {
+import java.io.Serializable;
+public class User implements Serializable {
   private final String personalCodeUser;
   private double personalWallet;
 
@@ -36,8 +36,7 @@ public class User {
     if (b.checkPersonalCode(this)) {
       for (int i = 0; i < b.getAccountList().size(); i++) {
         if (b.getAccountList().get(i).getPersonalCodeBank().equals(personalCodeUser)) {
-          System.out.println(
-              "In your bank account: " + b.getAccountList().get(i).getPersonalBalance());
+          System.out.println("In your bank account: " + b.getAccountList().get(i).getPersonalBalance() + "$");
         }
       }
       System.out.print("How much money do you want to withdraw? ");
@@ -46,12 +45,13 @@ public class User {
       for (int i = 0; i < b.getAccountList().size(); i++) {
         if (b.getAccountList().get(i).getPersonalCodeBank().equals(personalCodeUser)) {
           if (money > b.getAccountList().get(i).getPersonalBalance()) {
-            System.out.println("You have less money in your personal balance");
-            break;
+            System.out.println("You have less money in your personal balance.");
+            return;
           } else {
             personalWallet += money;
-            b.getAccountList().get(i).setPersonalBalance(-1 * (money));
-            break;
+            b.getAccountList().get(i).setPersonalBalance(-money);
+            System.out.println("You have withdrawn: " + money + "$. Your new wallet balance: " + personalWallet + "$.");
+            return;
           }
         }
       }

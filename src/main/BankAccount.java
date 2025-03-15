@@ -5,12 +5,11 @@ public class BankAccount {
   private final String personalCodeBank;
   private double personalBalance;
   private final List<Investment> investmentList;
-  private boolean hasInvestments;
+  private User owner; // Aggiunto attributo owner
 
   public BankAccount(String pC) {
     this.personalCodeBank = pC;
     this.personalBalance = 0.0;
-    this.hasInvestments = false;
     this.investmentList = new ArrayList<>();
   }
 
@@ -32,12 +31,10 @@ public class BankAccount {
 
   public void addInvestmentList(Investment i) {
     if (personalBalance >= i.getQInvest()) {
-      hasInvestments = true;
       personalBalance -= i.getQInvest();
       investmentList.add(i);
     } else {
-      System.out.println(
-          "You can't invest, your personal balance is lower than money in your investment");
+      System.out.println("You can't invest, your personal balance is lower than money in your investment");
       System.out.println("Deposit for invest");
     }
   }
@@ -58,5 +55,13 @@ public class BankAccount {
         System.out.println("Finish in: " + i.getLimit() + " month/s");
       }
     }
+  }
+
+  public User getOwner() {
+    return owner;
+  }
+
+  public void setOwner(User owner) {
+    this.owner = owner;
   }
 }
