@@ -30,12 +30,12 @@ public class Bank {
     }
   }
 
-  // Add method to manage accounts, e.g., createAccountList(), removeAccount(), etc.
+
   public void createAccountList(BankAccount o) {
     accountList.add(o);
   }
 
-  // Method to check if a user's personal code matches an account
+
   public boolean checkPersonalCode(User u) {
     for (BankAccount account : accountList) {
       if (account.getPersonalCodeBank().equals(u.getPersonalCodeUser())) {
@@ -45,12 +45,12 @@ public class Bank {
     return false;
   }
 
-  // Method to get the list of bank accounts
+
   public ArrayList<BankAccount> getAccountList() {
     return accountList;
   }
 
-  // Method for time travel
+
   public void timeTravel(User u) {
     System.out.println("Day: " + day);
     System.out.print("Do you want to do a time travel (y or n)? ");
@@ -96,7 +96,7 @@ public class Bank {
   public void saveUserData(String filename) {
     try (PrintWriter writer = new PrintWriter(new FileWriter(filename))) {
       for (Acc acc : userList) {
-        // Trova l'oggetto BankAccount corrispondente all'utente
+
         BankAccount account = findAccount(acc.getUser().getPersonalCodeUser());
         if (account != null) {
           writer.println(
@@ -112,7 +112,7 @@ public class Bank {
         }
       }
     } catch (IOException e) {
-      e.printStackTrace(); // Gestisci l'eccezione in modo appropriato
+      e.printStackTrace();
     }
   }
 
@@ -122,6 +122,6 @@ public class Bank {
         return account;
       }
     }
-    return null; // Restituisce null se l'account non viene trovato
+    return null;
   }
 }

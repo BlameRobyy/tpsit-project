@@ -12,18 +12,6 @@ public class Transaction {
     this.type = type;
   }
 
-  public Date getDate() {
-    return date;
-  }
-
-  public double getAmount() {
-    return amount;
-  }
-
-  public String getType() {
-    return type;
-  }
-
   @Override
   public String toString() {
     SimpleDateFormat formatter = new SimpleDateFormat("gg/mm/aaaa");

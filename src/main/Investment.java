@@ -21,7 +21,7 @@ public class Investment {
     }
     this.riskEarning = r;
     this.isFinish = true;
-    this.result = 0;
+    this.result = 0.0;
   }
 
   public double payment() {

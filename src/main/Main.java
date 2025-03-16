@@ -114,16 +114,15 @@ public class Main {
       System.out.println("- View your investment list (code 6)");
       System.out.println("- View transaction history (code 7)");
       int operation = getValidInt(scanner); // Legge e valida l'input
-
       switch (operation) {
         case 0:
           System.out.println("Deposit operation.");
-          user.deposit(selectedBank, scanner);
+          user.deposit(selectedBank, null);
+
           break;
         case 1:
           System.out.println("Withdrawal operation.");
-          user.withdraw(selectedBank, scanner);
-          askContinue(scanner);
+          user.withdraw(selectedBank, null);
           break;
         case 2:
           System.out.println("Looking at the wallet.");
@@ -158,6 +157,7 @@ public class Main {
         default:
           System.out.println("Invalid operation.");
       }
+      scanner.nextLine();
       do {
         System.out.println("Do you want to perform another operation? (y/n) ");
         answ = scanner.nextLine();
@@ -168,6 +168,7 @@ public class Main {
           System.out.println("Invalid input. Please enter 'y' or 'n'.");
         }
       } while (!answ.equalsIgnoreCase("y") && !answ.equalsIgnoreCase("n"));
+
     } while (answ.equalsIgnoreCase("y"));
   }
 
@@ -233,15 +234,4 @@ public class Main {
     }
   }
 
-  private static void askContinue(Scanner scanner) {
-    while (true) {
-      System.out.println("Do you want to perform another operation? (y/n) ");
-      String choice = scanner.nextLine().toLowerCase();
-      if (choice.equals("y") || choice.equals("n")) {
-        break;
-      } else {
-        System.out.println("Invalid input. Please enter 'y' or 'n'.");
-      }
-    }
-  }
 }

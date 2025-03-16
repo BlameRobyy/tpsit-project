@@ -18,6 +18,14 @@ public class BankAccount {
     this.personalBalance = personalBalance;
   }
 
+  public void withdraw(double amount) {
+    setPersonalBalance(-amount);
+  }
+
+  public void deposit(double amount) {
+    setPersonalBalance(amount);
+  }
+
   public String getPersonalCodeBank() {
     return personalCodeBank;
   }
