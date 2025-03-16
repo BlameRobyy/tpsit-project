@@ -3,6 +3,7 @@ import java.util.Scanner;
 public class Main {
   public static void main(String[] args) {
     Scanner scanner = new Scanner(System.in);
+
     Bank sanPaolo = Bank.uploadData("sanpaolo.txt");
     if (sanPaolo == null) {
       sanPaolo = new Bank();
@@ -54,6 +55,7 @@ public class Main {
           } else {
             System.out.println(" Incorrect username or password ");
           }
+
           break;
 
         case 2:
@@ -88,8 +90,8 @@ public class Main {
 
         case 3:
           System.out.println("program closure!");
-          sanPaolo.saveData("sanpaolo.txt");
-          generali.saveData("generali.txt");
+          sanPaolo.saveUserData("sanpaolo.txt");
+          generali.saveUserData("generali.txt");
           scanner.close();
           return;
 
@@ -121,7 +123,7 @@ public class Main {
         case 1:
           System.out.println("Withdrawal operation.");
           user.withdraw(selectedBank, scanner);
-          askContinue(scanner); // Chiede se continuare dopo il prelievo
+          askContinue(scanner);
           break;
         case 2:
           System.out.println("Looking at the wallet.");
@@ -180,7 +182,7 @@ public class Main {
       }
 
       System.out.println(
-              "Enter the investment term (0 = 12 months, 1 = 60 months, 2 = 120 months): ");
+          "Enter the investment term (0 = 12 months, 1 = 60 months, 2 = 120 months): ");
       int durata = Integer.parseInt(scanner.nextLine());
 
       if (durata < 0 || durata > 2) {

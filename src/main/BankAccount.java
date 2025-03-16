@@ -3,11 +3,11 @@ import java.util.List;
 
 public class BankAccount {
   private final String personalCodeBank;
-  private double personalBalance;
   private final List<Investment> investmentList;
-  private boolean checkInvestmentList;
-  private String username;
-  private ArrayList<Transaction> transactionHistory;
+  private double personalBalance;
+  private final boolean checkInvestmentList;
+  private final String username;
+  private final ArrayList<Transaction> transactionHistory;
 
   public BankAccount(String personalCodeBank, String username) {
     this.personalCodeBank = personalCodeBank;
@@ -61,6 +61,8 @@ public class BankAccount {
       }
     }
   }
+
+
 
   public ArrayList<Transaction> getTransactionHistory() {
     return transactionHistory;

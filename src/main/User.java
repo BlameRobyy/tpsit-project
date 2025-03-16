@@ -1,6 +1,7 @@
 import java.util.Scanner;
+
 public class User{
-  private final String personalCodeUser;
+  private String personalCodeUser;
   private double personalWallet;
   private final String username;
 
@@ -16,6 +17,10 @@ public class User{
 
   public String getPersonalCodeUser() {
     return personalCodeUser;
+  }
+
+  public void setPersonalCodeUser(String a){
+    personalCodeUser=a;
   }
 
   public void deposit(Bank b, Scanner scanner) {
@@ -35,8 +40,6 @@ public class User{
       }
     }
   }
-
-
 
   public void withdraw(Bank b, Scanner scanner) {
     if (b.checkPersonalCode(this)) {
@@ -76,7 +79,6 @@ public class User{
     }
   }
 
-
   public void lookWallet() {
     System.out.println("In your wallet there are: " + personalWallet + '$');
   }
@@ -93,7 +95,12 @@ public class User{
     }
   }
 
+  public double getPersonalWallet() {
+    return personalWallet;
+  }
+
   public void setPersonalWallet(double w) {
     personalWallet += w;
   }
+
 }
