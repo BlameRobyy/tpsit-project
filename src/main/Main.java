@@ -1,172 +1,245 @@
-import java.util.HashMap;
 import java.util.Scanner;
 
 public class Main {
   public static void main(String[] args) {
-    UserManager userManager = new UserManager();
-
-    // Creazione delle banche
-    Bank SanPaolo = new Bank();
-    Bank Generali = new Bank();
-
-    // Creazione degli account bancari
-    BankAccount s1 = new BankAccount("user001");
-    BankAccount s2 = new BankAccount("user002");
-    BankAccount s3 = new BankAccount("user003");
-
-    BankAccount g1 = new BankAccount("user001");
-    BankAccount g2 = new BankAccount("user002");
-    BankAccount g3 = new BankAccount("user003");
-
-    // Aggiunta degli account bancari alle rispettive banche
-    SanPaolo.createAccountList(s1);
-    SanPaolo.createAccountList(s2);
-    SanPaolo.createAccountList(s3);
-
-    Generali.createAccountList(g1);
-    Generali.createAccountList(g2);
-    Generali.createAccountList(g3);
-
-    // Creazione degli utenti
-    User u1 = new User("user001");
-    User u2 = new User("user002");
-    User u3 = new User("user003");
-    User u4 = new User("user004");
-
-    userManager.addUser(u1);
-    userManager.addUser(u2);
-    userManager.addUser(u3);
-    userManager.addUser(u4);
-
-    s1.setOwner(u1);
-    s2.setOwner(u2);
-    s3.setOwner(u3);
-
-    g1.setOwner(u1);
-    g2.setOwner(u2);
-    g3.setOwner(u3);
-
-    for (BankAccount account : SanPaolo.getAccountList()) {
-      User owner = userManager.getUser(account.getPersonalCodeBank());
-      if (owner != null) {
-        account.setOwner(owner);
-      }
-    }
-
-    for (BankAccount account : Generali.getAccountList()) {
-      User owner = userManager.getUser(account.getPersonalCodeBank());
-      if (owner != null) {
-        account.setOwner(owner);
-      }
-    }
-    System.out.println("Hi, I will help you with your bank account.");
-    System.out.println("Which bank do you want to use? (San Paolo = 0 | Generali = 1)");
-
     Scanner scanner = new Scanner(System.in);
+    Bank sanPaolo = Bank.uploadData("sanpaolo.txt");
+    if (sanPaolo == null) {
+      sanPaolo = new Bank();
+    }
 
-    int checkBank = scanner.nextInt();
-    scanner.nextLine();
+    Bank generali = Bank.uploadData("generali.txt");
+    if (generali == null) {
+      generali = new Bank();
+    }
 
-    Bank selectedBank = null;
-    HashMap<String, User> selectedUsers = null;
+    System.out.println(" ************BANK ACCOUNT************ ");
 
-    if (checkBank == 0 || checkBank == 1) {
-      selectedBank = (checkBank == 0) ? SanPaolo : Generali;
+    while (true) {
+      System.out.println("\nChose an option: ");
+      System.out.println("1. Login");
+      System.out.println("2. Registration");
+      System.out.println("3. Exit");
 
-      System.out.println("Insert your personal code:");
-      String code = scanner.nextLine();
+      int choice = getValidInt(scanner); // Legge e valida l'input
 
-      // Trova l'utente dalla mappa
-      User currentUser = userManager.getUser(code);
+      switch (choice) {
+        case 1:
+          System.out.println("\nLogin:");
+          System.out.println("Insert username:");
+          String username = scanner.nextLine();
+          System.out.println("Insert password:");
+          String password = scanner.nextLine();
 
-      if (currentUser != null) {
-
-        System.out.println("Perfect, account found.");
-        System.out.println("Now you can do these operations:");
-        System.out.println("- Deposit (code 0)");
-        System.out.println("- Withdraw (code 1)");
-        System.out.println("- Look wallet (code 2)");
-        System.out.println("- Look your personal balance (code 3)");
-        System.out.println("- Do a time-travel (code 4)");
-        System.out.println("- Create an investment (code 5)");
-        System.out.println("- Look your investment list (code 6)");
-        System.out.println("Do you want to execute one of them? (y/n)");
-
-        char answer1 = scanner.next().charAt(0);
-        while (answer1 == 'y') {
-          System.out.println("Which one?");
-          int operation = scanner.nextInt();
-
-          switch (operation) {
-            case 0 -> {
-              System.out.println("Performing deposit...");
-              currentUser.deposit(selectedBank);
-            }
-            case 1 -> {
-              System.out.println("Performing withdrawal...");
-              currentUser.withdraw(selectedBank);
-            }
-            case 2 -> {
-              System.out.println("Looking at wallet...");
-              currentUser.lookWallet();
-            }
-            case 3 -> {
-              System.out.println("Looking at personal balance...");
-              currentUser.lookPersonalBalance(selectedBank);
-            }
-            case 4 -> {
-              System.out.println("Performing time travel...");
-              selectedBank.timeTravel(currentUser);
-            }
-            case 5 -> {
-              System.out.println("How much do you want to invest?");
-              double invest1 = scanner.nextDouble();
-              System.out.println("Duration? (short=0, mid=1, long=2)");
-              int duration = scanner.nextInt();
-
-              if (duration >= 0 && duration <= 2) {
-                System.out.println("Risk? (low=0, mid=1, high=2)");
-                int risk = scanner.nextInt();
-
-                if (risk >= 0 && risk <= 2) {
-                  for (BankAccount account : selectedBank.getAccountList()) {
-                    if (account.getPersonalCodeBank().equals(currentUser.getPersonalCodeUser())) {
-                      Investment invest = new Investment(invest1, duration, risk);
-                      account.addInvestmentList(invest);
-                    }
-                  }
-                } else {
-                  System.out.println("Wrong type of risk.");
-                  break;
-                }
-              } else {
-                System.out.println("Wrong type of duration.");
-                break;
+          int checkBank = -1;
+          while (checkBank != 0 && checkBank != 1) {
+            try {
+              System.out.println("What bank you use? (San Paolo = 0 | Generali = 1)");
+              checkBank = Integer.parseInt(scanner.nextLine());
+              if (checkBank != 0 && checkBank != 1) {
+                System.out.println("Invalid input. Please enter 0 or 1.");
               }
+            } catch (NumberFormatException e) {
+              System.out.println("Invalid input. Please enter 0 or 1.");
             }
-            case 6 -> {
-              System.out.println("Investment status:");
-              for (BankAccount account : selectedBank.getAccountList()) {
-                if (account.getPersonalCodeBank().equals(currentUser.getPersonalCodeUser())) {
-                  account.printInvestmentStatus();
-                }
-              }
-            }
-            default -> System.out.println("Invalid operation.");
           }
 
-          System.out.println("Do you want to execute another operation? (y/n)");
-          answer1 = scanner.next().charAt(0);
-        }
-      } else {
-        System.out.println("There is no account with this code in this bank.");
-        System.exit(1);
+          Bank selectedBank = (checkBank == 0) ? sanPaolo : generali;
+
+          Acc account = selectedBank.authenticateUser(username, password);
+
+          if (account != null) {
+            System.out.println("Login successful!");
+            gestisciOperazioni(scanner, selectedBank, account.getUser());
+          } else {
+            System.out.println(" Incorrect username or password ");
+          }
+          break;
+
+        case 2:
+          System.out.println("\nRegistration:");
+          System.out.println("Insert username:");
+          String newUsername = scanner.nextLine();
+          System.out.println("Insert password:");
+          String newPassword = scanner.nextLine();
+          System.out.println("Insert personal code:");
+          String newPersonalCode = scanner.nextLine();
+
+          int newCheckBank = -1;
+          while (newCheckBank != 0 && newCheckBank != 1) {
+            try {
+              System.out.println("Which bank do you want to use? (San Paolo = 0 | Generali = 1) ");
+              newCheckBank = Integer.parseInt(scanner.nextLine());
+              if (newCheckBank != 0 && newCheckBank != 1) {
+                System.out.println("Invalid input. Please enter 0 or 1.");
+              }
+            } catch (NumberFormatException e) {
+              System.out.println("Invalid input. Please enter 0 or 1.");
+            }
+          }
+
+          Bank newSelectedBank = (newCheckBank == 0) ? sanPaolo : generali;
+
+          User newUser = new User(newPersonalCode, newUsername);
+          newSelectedBank.registerUser(newUsername, newPassword, newUser);
+          newSelectedBank.createAccountList(new BankAccount(newPersonalCode, newUsername));
+          System.out.println("Registration successful!");
+          break;
+
+        case 3:
+          System.out.println("program closure!");
+          sanPaolo.saveData("sanpaolo.txt");
+          generali.saveData("generali.txt");
+          scanner.close();
+          return;
+
+        default:
+          System.out.println("Invalid option. ");
       }
-    } else {
-      System.out.println("Bank not found.");
-      System.exit(1);
     }
-    userManager.saveUsers();
-    scanner.close();
+  }
+
+  private static void gestisciOperazioni(Scanner scanner, Bank selectedBank, User user) {
+    String answ;
+    do {
+      System.out.println("\nSelect an operation:");
+      System.out.println("- Deposit (code 0)");
+      System.out.println("- Withdrawal (code 1)");
+      System.out.println("- View wallet (code 2)");
+      System.out.println("- View personal balance (code 3)");
+      System.out.println("- time progress (code 4)");
+      System.out.println("- Create an investment (code 5)");
+      System.out.println("- View your investment list (code 6)");
+      System.out.println("- View transaction history (code 7)");
+      int operation = getValidInt(scanner); // Legge e valida l'input
+
+      switch (operation) {
+        case 0:
+          System.out.println("Deposit operation.");
+          user.deposit(selectedBank, scanner);
+          break;
+        case 1:
+          System.out.println("Withdrawal operation.");
+          user.withdraw(selectedBank, scanner);
+          askContinue(scanner); // Chiede se continuare dopo il prelievo
+          break;
+        case 2:
+          System.out.println("Looking at the wallet.");
+          user.lookWallet();
+          break;
+        case 3:
+          System.out.println("Check your personal balance. ");
+          user.lookPersonalBalance(selectedBank);
+          break;
+        case 4:
+          System.out.println("Time travel operation. ");
+          selectedBank.timeTravel(user);
+          break;
+        case 5:
+          System.out.println("Creating an investment.");
+          createInvestiment(scanner, selectedBank, user);
+          break;
+        case 6:
+          System.out.println("View investment status.");
+          visualizeInvestment(selectedBank, user);
+          break;
+        case 7:
+          System.out.println("View transaction history.");
+          for (BankAccount account : selectedBank.getAccountList()) {
+            if (account.getPersonalCodeBank().equals(user.getPersonalCodeUser())) {
+              for (Transaction t : account.getTransactionHistory()) {
+                System.out.println(t);
+              }
+            }
+          }
+          break;
+        default:
+          System.out.println("Invalid operation.");
+      }
+      do {
+        System.out.println("Do you want to perform another operation? (y/n) ");
+        answ = scanner.nextLine();
+        if (answ.equalsIgnoreCase("n")) {
+          break;
+        }
+        if (!answ.equalsIgnoreCase("y") && !answ.equalsIgnoreCase("n")) {
+          System.out.println("Invalid input. Please enter 'y' or 'n'.");
+        }
+      } while (!answ.equalsIgnoreCase("y") && !answ.equalsIgnoreCase("n"));
+    } while (answ.equalsIgnoreCase("y"));
+  }
+
+  private static void createInvestiment(Scanner scanner, Bank selectedBank, User user) {
+    try {
+      System.out.println("Enter the investment amount: ");
+      double importo = Double.parseDouble(scanner.nextLine());
+
+      if (importo <= 0) {
+        System.out.println("Invalid investment amount. Please enter a positive value.");
+        return;
+      }
+
+      System.out.println(
+              "Enter the investment term (0 = 12 months, 1 = 60 months, 2 = 120 months): ");
+      int durata = Integer.parseInt(scanner.nextLine());
+
+      if (durata < 0 || durata > 2) {
+        System.out.println("Invalid investment term. Please enter 0, 1, or 2.");
+        return;
+      }
+
+      System.out.println("Enter your investment risk (0 = low, 1 = medium, 2 = high): ");
+      int rischio = Integer.parseInt(scanner.nextLine());
+
+      if (rischio < 0 || rischio > 2) {
+        System.out.println("Invalid investment risk. Please enter 0, 1, or 2.");
+        return;
+      }
+
+      Investment investimento = new Investment(importo, durata, rischio);
+
+      for (BankAccount account : selectedBank.getAccountList()) {
+        if (account.getPersonalCodeBank().equals(user.getPersonalCodeUser())) {
+          account.addInvestmentList(investimento);
+          System.out.println("Investment created successfully.");
+          return;
+        }
+      }
+      System.out.println("Account not found for the user.");
+
+    } catch (NumberFormatException e) {
+      System.out.println("Invalid input. Please enter a numeric value.");
+    }
+  }
+
+  private static void visualizeInvestment(Bank selectedBank, User user) {
+    for (BankAccount account : selectedBank.getAccountList()) {
+      if (account.getPersonalCodeBank().equals(user.getPersonalCodeUser())) {
+        account.printInvestmentStatus();
+        break;
+      }
+    }
+  }
+
+  private static int getValidInt(Scanner scanner) {
+    while (true) {
+      try {
+        return Integer.parseInt(scanner.nextLine());
+      } catch (NumberFormatException e) {
+        System.out.println("Invalid input. Please enter a number.");
+      }
+    }
+  }
+
+  private static void askContinue(Scanner scanner) {
+    while (true) {
+      System.out.println("Do you want to perform another operation? (y/n) ");
+      String choice = scanner.nextLine().toLowerCase();
+      if (choice.equals("y") || choice.equals("n")) {
+        break;
+      } else {
+        System.out.println("Invalid input. Please enter 'y' or 'n'.");
+      }
+    }
   }
 }

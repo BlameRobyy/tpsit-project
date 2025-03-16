@@ -11,6 +11,7 @@ public class Investment {
     public Investment(double q, int d, int r) {
         this.qInvest = q;
         this.duration = d;
+
         if (duration == 0) {
             this.limit = 12;
         } else if (duration == 1) {
@@ -25,8 +26,8 @@ public class Investment {
 
     public double payment() {
         Random rand = new Random();
-
         double perCentDuration = 0;
+
         if (duration == 0) {
             perCentDuration = (qInvest * 1) / 100;
         } else if (duration == 1) {
@@ -36,30 +37,21 @@ public class Investment {
         }
 
         double perCentRiskEarning = 0;
-        int die = rand.nextInt(10) + 1;
+        int die;
         if (riskEarning == 0) {
-            if (die == 1) {
-                perCentRiskEarning = -1 * ((qInvest * 10) / 100);
-            } else {
-                perCentRiskEarning = ((qInvest * 10) / 100);
-            }
+            die = rand.nextInt(10) + 1;
+            perCentRiskEarning = (die == 1) ? -((qInvest * 10) / 100) : ((qInvest * 10) / 100);
         } else if (riskEarning == 1) {
-            if (die <= 3) {
-                perCentRiskEarning = -1 * ((qInvest * 50) / 100);
-            } else {
-                perCentRiskEarning = ((qInvest * 50) / 100);
-            }
+            die = rand.nextInt(10) + 1;
+            perCentRiskEarning = (die <= 3) ? -((qInvest * 50) / 100) : ((qInvest * 50) / 100);
         } else if (riskEarning == 2) {
-            if (die <= 5) {
-                perCentRiskEarning = -1 * ((qInvest * 70) / 100);
-            } else {
-                perCentRiskEarning = ((qInvest * 70) / 100);
-            }
+            die = rand.nextInt(10) + 1;
+            perCentRiskEarning = (die <= 5) ? -((qInvest * 70) / 100) : ((qInvest * 70) / 100);
         }
 
-        System.out.println("investment is finish");
-        this.setResult((((qInvest) + (perCentDuration)) + (perCentRiskEarning)));
-        return (((qInvest) + (perCentDuration)) + (perCentRiskEarning));
+        System.out.println("Investment is finished");
+        this.setResult(qInvest + perCentDuration + perCentRiskEarning);
+        return qInvest + perCentDuration + perCentRiskEarning;
     }
 
     public int getDuration() {
@@ -71,14 +63,14 @@ public class Investment {
     }
 
     public void setLimit() {
-        this.limit -= 1;
+        limit -= 1;
     }
 
-    public boolean getFinish() {
+    public boolean getIsFinish() {
         return isFinish;
     }
 
-    public void setFinish() {
+    public void setIsFinish() {
         isFinish = false;
     }
 
@@ -90,11 +82,11 @@ public class Investment {
         return riskEarning;
     }
 
-    public double getResult() {
-        return result;
-    }
-
     public void setResult(double b) {
         result = b;
+    }
+
+    public double getResult() {
+        return result;
     }
 }

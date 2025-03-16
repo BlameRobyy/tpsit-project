@@ -5,19 +5,22 @@ public class BankAccount {
   private final String personalCodeBank;
   private double personalBalance;
   private final List<Investment> investmentList;
-  private User owner; // Aggiunto attributo owner
+  private boolean checkInvestmentList;
+  private String username;
+  private ArrayList<Transaction> transactionHistory;
 
-  public BankAccount(String pC) {
-    this.personalCodeBank = pC;
-    this.personalBalance = 0.0;
+  public BankAccount(String personalCodeBank, String username) {
+    this.personalCodeBank = personalCodeBank;
     this.investmentList = new ArrayList<>();
+    this.transactionHistory = new ArrayList<>();
+    this.username = username;
+    this.checkInvestmentList = false;
+    this.personalBalance = personalBalance;
   }
 
   public String getPersonalCodeBank() {
     return personalCodeBank;
   }
-
-
 
   public double getPersonalBalance() {
     return personalBalance;
@@ -59,11 +62,7 @@ public class BankAccount {
     }
   }
 
-  public User getOwner() {
-    return owner;
-  }
-
-  public void setOwner(User owner) {
-    this.owner = owner;
+  public ArrayList<Transaction> getTransactionHistory() {
+    return transactionHistory;
   }
 }
