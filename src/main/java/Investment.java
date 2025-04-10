@@ -11,49 +11,56 @@ public class Investment {
   public Investment(double q, int d, int r) {
     this.qInvest = q;
     this.duration = d;
-
-    if (duration == 0) {
-      this.limit = 12;
-    } else if (duration == 1) {
-      this.limit = 60;
-    } else {
-      this.limit = 120;
-    }
+    this.limit = getDurationLimit(d);
     this.riskEarning = r;
     this.isFinish = true;
     this.result = 0.0;
   }
 
-  public double payment() {
+  private int getDurationLimit(int duration) {
+    switch (duration) {
+      case 0: return 12;
+      case 1: return 60;
+      case 2: return 120;
+      default: throw new IllegalArgumentException("Invalid duration value");
+    }
+  }
+
+  private double calculatePerCentDuration() {
+    switch (duration) {
+      case 0: return (qInvest * 1) / 100;
+      case 1: return (qInvest * 5) / 100;
+      case 2: return (qInvest * 10) / 100;
+      default: throw new IllegalArgumentException("Invalid duration value");
+    }
+  }
+
+  private double calculatePerCentRiskEarning() {
     Random rand = new Random();
-    double perCentDuration = 0;
+    int die = rand.nextInt(10) + 1;
 
-    if (duration == 0) {
-      perCentDuration = (qInvest * 1) / 100;
-    } else if (duration == 1) {
-      perCentDuration = (qInvest * 5) / 100;
-    } else if (duration == 2) {
-      perCentDuration = (qInvest * 10) / 100;
+    switch (riskEarning) {
+      case 0:
+        return (die == 1) ? -((qInvest * 10) / 100) : ((qInvest * 10) / 100);
+      case 1:
+        return (die <= 3) ? -((qInvest * 50) / 100) : ((qInvest * 50) / 100);
+      case 2:
+        return (die <= 5) ? -((qInvest * 70) / 100) : ((qInvest * 70) / 100);
+      default:
+        throw new IllegalArgumentException("Invalid risk earning value");
     }
+  }
 
-    double perCentRiskEarning = 0;
-    int die;
-    if (riskEarning == 0) {
-      die = rand.nextInt(10) + 1;
-      perCentRiskEarning = (die == 1) ? -((qInvest * 10) / 100) : ((qInvest * 10) / 100);
-    } else if (riskEarning == 1) {
-      die = rand.nextInt(10) + 1;
-      perCentRiskEarning = (die <= 3) ? -((qInvest * 50) / 100) : ((qInvest * 50) / 100);
-    } else if (riskEarning == 2) {
-      die = rand.nextInt(10) + 1;
-      perCentRiskEarning = (die <= 5) ? -((qInvest * 70) / 100) : ((qInvest * 70) / 100);
-    }
+  public double payment() {
+    double perCentDuration = calculatePerCentDuration();
+    double perCentRiskEarning = calculatePerCentRiskEarning();
 
     System.out.println("Investment is finished");
     this.setResult(qInvest + perCentDuration + perCentRiskEarning);
     return qInvest + perCentDuration + perCentRiskEarning;
   }
 
+  // Getter and Setter methods
   public int getDuration() {
     return duration;
   }

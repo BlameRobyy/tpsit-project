@@ -2,9 +2,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Transaction {
-  private final Date date;
-  private final double amount;
-  private final String type;
+  private Date date;
+  private double amount;
+  private String type;
 
   public Transaction(Date date, double amount, String type) {
     this.date = date;
@@ -14,7 +14,22 @@ public class Transaction {
 
   @Override
   public String toString() {
-    SimpleDateFormat formatter = new SimpleDateFormat("gg/mm/aaaa");
-    return formatter.format(date) + "," + amount + "," + type;
+    return "Transaction{" +
+            "type='" + type + '\'' +
+            ", amount=" + amount +
+            ", date=" + date +
+            '}';
+  }
+
+  public String getType() {
+    return type;
+  }
+
+  public double getAmount() {
+    return amount;
+  }
+
+  public Date getDate() {
+    return date;
   }
 }

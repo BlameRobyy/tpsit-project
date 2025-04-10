@@ -22,6 +22,7 @@ public class AccTest {
         assertEquals("newPassword", account.getPassword());
         assertEquals(newUser, account.getUser());
     }
+
     @Test
     public void testDeposit() {
         // Creazione di un oggetto Bank e User

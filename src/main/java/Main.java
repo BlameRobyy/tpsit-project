@@ -157,7 +157,6 @@ public class Main {
         default:
           System.out.println("Invalid operation.");
       }
-      scanner.nextLine();
       do {
         System.out.println("Do you want to perform another operation? (y/n) ");
         answ = scanner.nextLine();

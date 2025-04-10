@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class User{
@@ -64,6 +65,7 @@ public class User{
       for (BankAccount account : b.getAccountList()) {
         if (account.getPersonalCodeBank().equals(personalCodeUser)) {
           account.deposit(amount);
+
           return true;
         }
       }

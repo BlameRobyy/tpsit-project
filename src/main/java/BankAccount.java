@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class BankAccount {
@@ -20,10 +21,14 @@ public class BankAccount {
 
   public void withdraw(double amount) {
     setPersonalBalance(-amount);
+    Transaction withdrawTransaction = new Transaction(new Date(), amount, "Withdraw");
+    transactionHistory.add(withdrawTransaction);
   }
 
   public void deposit(double amount) {
     setPersonalBalance(amount);
+    Transaction depositTransaction = new Transaction(new Date(), amount, "Deposit");
+    transactionHistory.add(depositTransaction);
   }
 
   public String getPersonalCodeBank() {
@@ -75,4 +80,5 @@ public class BankAccount {
   public ArrayList<Transaction> getTransactionHistory() {
     return transactionHistory;
   }
+
 }
