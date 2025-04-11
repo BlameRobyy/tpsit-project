@@ -1,5 +1,9 @@
 import java.io.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.Scanner;
 
 public class Bank {
@@ -13,22 +17,50 @@ public class Bank {
     Bank bank = new Bank();
     try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
       String line;
+      BankAccount currentAccount = null;  // Variabile per tenere traccia dell'account corrente
       while ((line = reader.readLine()) != null) {
         String[] parts = line.split(",");
+
+        // Se la riga contiene informazioni sull'account
         if (parts.length == 5) {
-          User user = new User(parts[2], parts[0]);
+          // Passa anche il valore del wallet dal file
+          double personalWallet = Double.parseDouble(parts[3]);
+          User user = new User(parts[2], parts[0], personalWallet); // Inizializza l'utente con il wallet corretto
           Acc acc = new Acc(parts[0], parts[1], user);
           BankAccount account = new BankAccount(parts[2], parts[0]);
           account.setPersonalBalance(Double.parseDouble(parts[4]));
+
+          // Aggiungi l'account e l'utente alla lista del banco
           bank.userList.add(acc);
           bank.accountList.add(account);
+          currentAccount = account;  // Imposta l'account corrente
+        }
+        // Se la riga è una transazione
+        else if (line.startsWith("Transaction")) {
+          // Aggiungi la transazione all'account corrente
+          if (currentAccount != null) {
+            String[] transactionParts = line.split(", ");
+            String type = transactionParts[0].split(": ")[1];
+            double amount = Double.parseDouble(transactionParts[1].split(": ")[1]);
+            String dateString = transactionParts[2].split(": ")[1];
+
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date date = dateFormat.parse(dateString);
+
+            // Crea una nuova transazione e aggiungila all'account
+            Transaction transaction = new Transaction(date, amount, type);
+            currentAccount.getTransactionHistory().add(transaction);
+          }
         }
       }
       return bank;
-    } catch (IOException | NumberFormatException e) {
+    } catch (IOException | NumberFormatException | ParseException e) {
+      e.printStackTrace();
       return null;
     }
   }
+
+
 
 
   public void createAccountList(BankAccount o) {
@@ -94,27 +126,50 @@ public class Bank {
   }
 
   public void saveUserData(String filename) {
-    try (PrintWriter writer = new PrintWriter(new FileWriter(filename))) {
-      for (Acc acc : userList) {
+    try {
+      // Leggi il file esistente
+      List<String> existingLines = new ArrayList<>();
+      File file = new File(filename);
+      if (file.exists()) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+          String line;
+          while ((line = reader.readLine()) != null) {
+            existingLines.add(line);
+          }
+        }
+      }
 
-        BankAccount account = findAccount(acc.getUser().getPersonalCodeUser());
-        if (account != null) {
-          writer.println(
-              acc.getUsername()
-                  + ","
-                  + acc.getPassword()
-                  + ","
-                  + acc.getUser().getPersonalCodeUser()
-                  + ","
-                  + acc.getUser().getPersonalWallet()
-                  + ","
-                  + account.getPersonalBalance());
+      // Aggiungi nuovi dati solo se non sono già presenti
+      try (PrintWriter writer = new PrintWriter(new FileWriter(filename, false))) {  // Usa false per sovrascrivere il file
+        for (Acc acc : userList) {
+          BankAccount account = findAccount(acc.getUser().getPersonalCodeUser());
+          if (account != null) {
+            // Scrivi i dati dell'utente e delle transazioni
+            writer.println(
+                    acc.getUsername()
+                            + "," + acc.getPassword()
+                            + "," + acc.getUser().getPersonalCodeUser()
+                            + "," + acc.getUser().getPersonalWallet()
+                            + "," + account.getPersonalBalance());
+            for (Transaction transaction : account.getTransactionHistory()) {
+              SimpleDateFormat date1 = new SimpleDateFormat("yyyy-MM-dd");
+              String transactionDate = date1.format(transaction.getDate());
+              writer.println("Transaction: "
+                      + transaction.getType()
+                      + ", Amount: "
+                      + transaction.getAmount()
+                      + ", Date: "
+                      + transactionDate);
+            }
+          }
         }
       }
     } catch (IOException e) {
       e.printStackTrace();
     }
   }
+
+
 
   private BankAccount findAccount(String personalCode) {
     for (BankAccount account : accountList) {

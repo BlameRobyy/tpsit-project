@@ -12,6 +12,13 @@ public class User{
     this.username = username;
   }
 
+  public User(String pcu, String username, double personalWallet) {
+    this.personalCodeUser = pcu;
+    this.username = username;
+    this.personalWallet = personalWallet;
+  }
+
+
   public String getUsername() {
     return username;
   }
